@@ -28,7 +28,7 @@ def auth():
         return render_template("login.html", message = m1)
     else:
         m2 = checkLogin(username, password)
-        return render_templates("login.html", message = m2)
+        return render_template("login.html", message = m2)
     
 if __name__ == "__main__":
     app.debug = True
