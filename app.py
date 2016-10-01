@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request
+import hashlib
+
 app = Flask(__name__)
 example = {"user": "steph", "password": "yoon"}
+def hash(x):
+    return hashlib.sha256(
 @app.route("/")
 @app.route("/login/") #multiple routes go to the same function/
 def login():
