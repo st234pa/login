@@ -59,7 +59,7 @@ def auth():
         m1 = register(username, password)
         return render_template("login.html", message = m1)
     else:
-       if checkLogin() == True:
+       if checkLogin(username, password) == True:
            return redirect(url_for('welcome'))
        return render_template('login.html', message = "Either your username or your password was incorrect.")
     
