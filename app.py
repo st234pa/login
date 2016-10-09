@@ -3,9 +3,6 @@ import hashlib
 import csv
 
 app = Flask(__name__)
-#SESSION_TYPE = 'redis'
-#app.config.from_object(__name__)
-#Session(app)
 app.secret_key = '??_|??0??l6?J??8?J2????A???+q? '
 
 def hash(x):
@@ -28,31 +25,39 @@ def checkLogin(username, password):
     for i in d:
         if username == i[0]:
             if i[1] == hash(password):
-                session[username] = hash(password)
-                return "You are now successfully logged in."
-            return "Incorrect password."
-    return "Incorrect username."
+                return True
+    return False
 
 @app.route("/")
 def root():
+    for user in session:
+        return redirect(url_for('welcome'))
     return redirect(url_for('login'))
 
 @app.route("/login/") #multiple routes go to the same function/
 def login():
     print request.headers
     return render_template("login.html")
-        
+
+@app.route("/logout/", methods=['POST'])
+def logout():
+    if request.form['enter'] == 'Logout':
+        session.pop('user')
+    return redirect(url_for('login'))
+
 @app.route("/authenticate/", methods=['GET', 'POST'])
 def auth():
     response = request.form
     username = response['user']
     password = response['password']
+    session['user'] = username
     if response['enter'] == 'Register':
         m1 = register(username, password)
         return render_template("login.html", message = m1)
     else:
-        m2 = checkLogin(username, password)
-        return render_template("login.html", message = m2)
+       if checkLogin() == True:
+           return redirect(url_for('welcome'))
+       return render_template('login.html', message = "Either your username or your password was incorrect.")
     
 if __name__ == "__main__":
     app.debug = True
