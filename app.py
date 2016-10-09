@@ -39,6 +39,10 @@ def login():
     print request.headers
     return render_template("login.html")
 
+@app.route("/welcome/")
+def welcome():
+    return render_template('welcome.html', user = session['user'])
+
 @app.route("/logout/", methods=['POST'])
 def logout():
     if request.form['enter'] == 'Logout':
